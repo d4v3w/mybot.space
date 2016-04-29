@@ -1,0 +1,20 @@
+{
+  "name": "mybot.space",
+  "version": "1.0.0",
+  "description": "Robot controlling web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mybot.space"
+    "robot",
+    "app",
+    "node"
+  ],
+  "author": "d4v3w",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
