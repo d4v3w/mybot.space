@@ -1,8 +1,54 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans);
+
+html {
+	height: 100%;
+}
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #efefef;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  line-height: 14px;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 2em;
+  line-height: 2em;
 }
 
 a {
   color: #00B7FF;
+}
+
+nav {
+    float: right;
+}
+
+nav ul {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+nav ul li {
+	margin: 0;
+	padding: 0 0.25em;
+	display: inline-block;
+	border-left: 1px solid white;
+}
+
+nav ul li:first-child {
+	border-left: none;
+}
+
+nav ul li a {
+	margin: 0;
+	padding: 0.25em;
+	display: inline-block;
+	text-decoration: none;
+}
+
+nav ul li a:hover {
+	text-decoration: underline;
 }

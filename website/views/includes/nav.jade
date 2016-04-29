@@ -1,0 +1,7 @@
+- var pages = [{title: 'home', href: '/' }, { title: 'about', href: '/about' }, { title: 'robots', href: '/robots' } ];
+
+nav
+  ul
+    -each page in pages
+      li
+        a(href =page.href) #{page.title}
