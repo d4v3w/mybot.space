@@ -1,7 +1,17 @@
 {
   "name": "website",
   "description": "Robot controlling web app",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "license": "BEER-WARE LICENSE",
+  "author": {
+    "name": "d4v3w",
+    "email": "d4v3w@",
+    "url": "http://www.twitter.com/d4v3w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d4v3w/mybot.space"
+  },
   "private": true,
   "main": "app.js",
   "scripts": {
