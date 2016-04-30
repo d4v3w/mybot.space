@@ -11,6 +11,7 @@ Thumbs.db
 pids
 logs
 results
+.settings
 
 node_modules
-npm-debug.log
+npm-shrinkwrap.json
