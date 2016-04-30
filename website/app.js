@@ -1,16 +1,16 @@
 
-var express = require('express')
-  , routes = require('./routes/index')
-  , users = require('./routes/users')
-  , http = require('http')
-  , path = require('path')
-  , app = express()
-  , server = http.createServer(app)
-  , io = require('socket.io').listen(server)  
-  , favicon = require('serve-favicon')
-  , logger = require('morgan')
-  , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser');
+var express = require('express'),
+    routes = require('./routes/index'),
+    users = require('./routes/users'),
+    http = require('http'),
+    path = require('path'),
+    app = express(),
+    server = http.createServer(app),
+    io = require('socket.io').listen(server),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -190,7 +190,7 @@ io.sockets.on('connection', function (socket) {
 
                 delete connectedUsers[nickname]    ;
                 socket.broadcast.emit('list', {list: Object.keys(connectedUsers)})  ; // for all others
-                console.log(nickname + " logged out")
+                console.log(nickname + " logged out");
             } else {
                 // Un named client has quit
             }

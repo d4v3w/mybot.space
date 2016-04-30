@@ -21,7 +21,7 @@
             // changing the plugin's code
             onFoo: function() {}
 
-        }
+        };
 
         // to avoid confusions, use "plugin" to reference the 
         // current instance of the object
@@ -32,10 +32,10 @@
         // plugin.settings.propertyName from inside the plugin or
         // element.data('robotUtil').settings.propertyName from outside the plugin, 
         // where "element" is the element the plugin is attached to;
-        plugin.settings = {}
+        plugin.settings = {};
 
-        var $element = $(element), // reference to the jQuery version of DOM element
-             element = element;    // reference to the actual DOM element
+        var $element = $(element); // reference to the jQuery version of DOM element
+            // element = element;    // reference to the actual DOM element
 
         // the "constructor" method that gets called when the object is created
         plugin.init = function() {
@@ -46,7 +46,7 @@
 
             // code goes here
 
-        }
+        };
 
         // public methods
         // these methods can be called like:
@@ -59,7 +59,7 @@
 
             // code goes here
 
-        }
+        };
 
         // private methods
         // these methods can be called only from inside the plugin like:
@@ -70,13 +70,13 @@
 
             // code goes here
 
-        }
+        };
 
         // fire up the plugin!
         // call the "constructor" method
         plugin.init();
 
-    }
+    };
 
     // add the plugin to the jQuery.fn object
     $.fn.robotUtil = function(options) {
@@ -85,7 +85,7 @@
         return this.each(function() {
 
             // if plugin has not already been attached to the element
-            if (undefined == $(this).data('robotUtil')) {
+            if (undefined === $(this).data('robotUtil')) {
 
                 // create a new instance of the plugin
                 // pass the DOM element and the user-provided options as arguments
@@ -102,6 +102,6 @@
 
         });
 
-    }
+    };
 
 })(jQuery);
