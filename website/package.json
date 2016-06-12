@@ -1,35 +1,35 @@
 {
-    "name": "website",
-    "description": "Robot controlling web app",
-    "version": "1.1.0",
-    "license": "BEER-WARE LICENSE",
-    "author": {
-        "name": "d4v3w",
-        "email": "d4v3w@",
-        "url": "http://www.twitter.com/d4v3w"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/d4v3w/mybot.space"
-    },
-    "private": true,
-    "main": "app.js",
-    "scripts": {
-        "start": "node ./bin/www",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "dependencies": {
-        "body-parser": "~1.13.2",
-        "cookie-parser": "~1.3.5",
-        "debug": "~2.2.0",
-        "express": "~4.13.1",
-        "forms": "^1.1.4",
-        "http": "0.0.0",
-        "jade": "~1.11.0",
-        "markdown": "^0.5.0",
-        "morgan": "~1.6.1",
-        "serve-favicon": "~2.3.0",
-        "socket.io": "^1.4.5",
-        "tags": "^1.1.3"
-    }
+  "name": "website",
+  "description": "Robot controlling web app",
+  "version": "1.1.0",
+  "license": "BEER-WARE LICENSE",
+  "author": {
+    "name": "d4v3w",
+    "email": "d4v3w@",
+    "url": "http://www.twitter.com/d4v3w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d4v3w/mybot.space"
+  },
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "forms": "^1.1.4",
+    "http": "0.0.0",
+    "jade": "~1.11.0",
+    "markdown": "^0.5.0",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0",
+    "socket.io": "^1.4.6",
+    "tags": "^1.1.3"
+  }
 }

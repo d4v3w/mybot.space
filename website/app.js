@@ -24,9 +24,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Url routing
+/*
 app.use('/', routes);
 app.use('/users', users);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,7 +37,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -59,142 +59,50 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
 
-var connectedUsers = {},
-    admin_socket_id = '',
-    admin_password = 'admin_password',
-    current_user;
+// IO Setup
+var robots = io
+    .of('/robots')
+    .sockets.on('connection', function (socket) {
+    // Only responding to sockets on robots
+    console.log('a user connected');
 
-io.sockets.on('connection', function (socket) {
-
-    // When new users join
-  socket.on('join', function (data, fn) {
-
-    if (data.nickname === 'admin') {
-        
-        if (data.pass == sudar_password) {
-            admin_socket_id = socket;
-            console.log("admin has logged in");
-        } else {
-            // It is not admin
-            fn(false);    
-            return;
-        }
-    } else {
-        
-        if (connectedUsers[data.nickname]) {
-            // make sure nickname doesn't exist before adding
-            fn(false);
-            return;
-        }
-        console.log(data.nickname + " joined");
-    }
-
-    socket.set('nickname', data.nickname, function () {
-        connectedUsers[data.nickname] = socket;
-        socket.emit('list', {list: Object.keys(connectedUsers)})  ;  // for the current socket
-        socket.broadcast.emit('list', {list: Object.keys(connectedUsers)})  ; // for all others
-        fn(true);
-    });
-  });
-
-    // ------------- admin events
-
-    // choose a user
-    socket.on('choose', function (data) {
-        var user_socket = connectedUsers[data.nickname];
-
-        if (user_socket) {
-            if (connectedUsers[current_user]) {
-                connectedUsers[current_user].emit('unchosen', {});
-                console.log(current_user + " unchosen");
-            }
-
-            current_user = data.nickname;
-            user_socket.emit('chosen', {});
-            console.log(current_user + " chosen");
-        }
+    // Control events
+    socket.on('forward', function () {
+        socket.emit('requestRecieved', {event: 'forward'});
+        socket.emit('forward', {});
+        console.log("Move forwards");
     });
     
-    // --------------- client events
-
-    socket.on('clientjoin', function (data) {
-        client_socket = socket;
-        console.log("BT Client joined");
+    socket.on('back', function () {
+        socket.emit('requestRecieved', {event: 'back'});
+        socket.emit('back', {});
+        console.log("Move backwards");
     });
-
-    // --------------- control events
-
-    socket.on('up', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname && nickname == current_user) {
-                if (client_socket) {
-                    client_socket.emit('up', {});     
-                    console.log("Up control");
-                }
-            }  
-        });        
-    });
-
+    
     socket.on('left', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname && nickname == current_user) {
-                if (client_socket) {
-                    client_socket.emit('left', {});     
-                    console.log("Left control");
-                }
-            }  
-        });        
+        socket.emit('requestRecieved', {event: 'left'});
+        socket.emit('left', {});
+        console.log("Turn left");
     });
-
+    
     socket.on('right', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname && nickname == current_user) {
-                if (client_socket) {
-                    client_socket.emit('right', {});     
-                    console.log("Right control");
-                }
-            }  
-        });        
+        socket.emit('requestRecieved', {event: 'right'});
+        socket.emit('right', {});
+        console.log("Turn right");
     });
-
-    socket.on('down', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname && nickname == current_user) {
-                if (client_socket) {
-                    client_socket.emit('down', {});     
-                    console.log("Down control");
-                }
-            }  
-        });        
-    });
-
+    
     socket.on('start', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname && nickname == current_user) {
-                if (client_socket) {
-                    client_socket.emit('start', {});
-                    console.log("start control");
-                }
-            }
-        });
+        socket.emit('requestRecieved', {event: 'start'});
+        socket.emit('start', {});
+        console.log("Start your engines");
     });
-
-    // When a client disconnects
-    socket.on('disconnect', function () {
-        socket.get('nickname', function (err, nickname) {
-            if (nickname) {
-                // TODO: Handle admin logging out
-
-                delete connectedUsers[nickname]    ;
-                socket.broadcast.emit('list', {list: Object.keys(connectedUsers)})  ; // for all others
-                console.log(nickname + " logged out");
-            } else {
-                // Un named client has quit
-            }
-        });
+    
+    socket.on('stop', function () {
+        socket.emit('requestRecieved', {event: 'stop'});
+        socket.emit('stop', {});
+        console.log("Stop");
     });
-
 });
+*/

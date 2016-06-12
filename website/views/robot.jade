@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1= title
+    p= body
+    #container
+        h2 Robot tastic
+        p
+            ol
+                li Press 'Enter' to start
+                li Use cursor keys to move
+                    ul
+                        li Forward = 'Up'
+                        li Reverse = 'Down'
+                        li Left = 'Left'
+                        li Right = 'Right'
+        script(type='text/javascript', src='https://cdn.socket.io/socket.io-1.4.5.js')
+        script(type='text/javascript', src='javascripts/robot.js')
+        script(type='text/javascript').
+            $(document).ready(function () {
+                $(window).robotUtil({
+                    url : 'http://127.0.0.1:3000/'
+                });
+            });

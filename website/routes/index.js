@@ -1,12 +1,10 @@
 var express = require('express'),
     router = express.Router();
-  
 
 var websiteConfig = {
 	name: 'mybot.space',
 	description: 'It\'s all about the robots.'
 };
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

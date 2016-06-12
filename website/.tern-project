@@ -1,0 +1,33 @@
+{
+  "ecmaVersion": 5,
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "outline": {
+      
+    },
+    "node": {
+      
+    },
+    "lint": {
+      
+    },
+    "chrome-extension": {
+      
+    },
+    "doc_comment": {
+      
+    },
+    "node-express": {
+      
+    },
+    "node-extension": {
+      
+    }
+  },
+  "libs": [
+    "browser",
+    "jquery"
+  ]
+}

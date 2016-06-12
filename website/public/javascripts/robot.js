@@ -2,106 +2,155 @@
  * robot.js | jQuery Plugin
  * Name: robotUtil
  * Description: Client side controller utils for robots
- * Based on 'jQuery Plugin Boilerplate' by Stefan Gabos 2011
+ * 
+ * Pins
+ * 17: right {on: 'fwd'}
+ * 18: right {on: 'back'}
+ * 27: left {on: 'fwd'}
+ * 22: left {on: 'back'}
  */
 
-(function($) {
-
-    $.robotUtil = function(element, options) {
-
-        // plugin's default options
-        // this is private property and is  accessible only from inside the plugin
+(function ($, console, io) {
+    'use strict';
+    $.robotUtil = function (element, options) {
         var defaults = {
+            keys : {
+                left : 37,
+                right : 39,
+                forward : 38,
+                reverse : 40,
+                stop : 13
+            },
+            url : '',
+            script : '',
+            getStatus : function () {
+                return 'Status';
+            }
+        },
+        plugin = this,
+        $element = $(element),
+        socket = undefined,
 
-            foo: 'bar',
+        log = function (msg, debug) {
+            if (!debug) {
+                console.log(msg);
+            }
+        },
 
-            // if your plugin is event-driven, you may provide callback capabilities
-            // for its events. execute these functions before or after events of your 
-            // plugin, so that users may customize those particular events without 
-            // changing the plugin's code
-            onFoo: function() {}
+        running = false,
 
+        doRobot = function (command) {
+            var that = this,
+                json = {};
+            
+            log('Do robot: ' + command);
+
+            socket.emit(command, {
+                timestamp: $.now()
+            });
+        },
+        
+        setupSocket = function () {
+            var connectionUrl = plugin.settings.url + plugin.settings.script;
+            log('setupSocket: ' + connectionUrl);
+            
+            socket = io.connect(connectionUrl);
+        },
+
+        setupSocketListeners = function () {
+            log('setupSocketListeners...', true);
+            socket.on('requestRecieved', function (data) {
+                log('requestRecieved: ' + data["event"]);
+            });
+        },
+
+        setupInterfaceListeners = function () {
+            log('setupInterfaceListeners...', true);
+            $element.keypress(function (event) {
+                log('Key press: ' + event.which, true);
+                if (event.which === plugin.settings.keys.stop) {
+                    event.preventDefault();
+                    if (running) {
+                        running = false;
+                        plugin.stop();
+                    } else {
+                        running = true;
+                        plugin.start();
+                    }
+                }
+            });
+            $element.keydown(function (event) {
+                if (running) {
+                    log('Key down: ' + event.which, true);
+                    if (event.which === plugin.settings.keys.forward) {
+                        event.preventDefault();
+                        plugin.forward();
+                    } else if (event.which === plugin.settings.keys.left) {
+                        event.preventDefault();
+                        plugin.left();
+                    } else if (event.which === plugin.settings.keys.right) {
+                        event.preventDefault();
+                        plugin.right();
+                    } else if (event.which === plugin.settings.keys.reverse) {
+                        event.preventDefault();
+                        plugin.reverse();
+                    }
+                } else {
+                    log('Key down ignored. Robot not started! <<PRESS ENTER>>');
+                }
+            });
         };
-
-        // to avoid confusions, use "plugin" to reference the 
-        // current instance of the object
-        var plugin = this;
-
-        // this will hold the merged default, and user-provided options
-        // plugin's properties will be available through this object like:
-        // plugin.settings.propertyName from inside the plugin or
-        // element.data('robotUtil').settings.propertyName from outside the plugin, 
-        // where "element" is the element the plugin is attached to;
         plugin.settings = {};
 
-        var $element = $(element); // reference to the jQuery version of DOM element
-            // element = element;    // reference to the actual DOM element
-
-        // the "constructor" method that gets called when the object is created
-        plugin.init = function() {
-
-            // the plugin's final properties are the merged default and 
-            // user-provided options (if any)
+        // public methods
+        plugin.init = function () {
+            log('plugin init...', false);
             plugin.settings = $.extend({}, defaults, options);
 
-            // code goes here
-
+            setupSocket();
+            setupSocketListeners();
+            setupInterfaceListeners();
         };
 
-        // public methods
-        // these methods can be called like:
-        // plugin.methodName(arg1, arg2, ... argn) from inside the plugin or
-        // element.data('robotUtil').publicMethod(arg1, arg2, ... argn) from outside 
-        // the plugin, where "element" is the element the plugin is attached to;
-
-        // a public method. for demonstration purposes only - remove it!
-        plugin.foo_public_method = function() {
-
-            // code goes here
-
+        plugin.start = function () {
+            log('Started... Press <<PRESS ENTER>> to stop');
+            doRobot('start');
         };
 
-        // private methods
-        // these methods can be called only from inside the plugin like:
-        // methodName(arg1, arg2, ... argn)
-
-        // a private method. for demonstration purposes only - remove it!
-        var foo_private_method = function() {
-
-            // code goes here
-
+        plugin.right = function () {
+            log('Right...');
+            doRobot('right');
         };
 
-        // fire up the plugin!
-        // call the "constructor" method
+        plugin.left = function () {
+            log('Left...');
+            doRobot('left', true);
+        };
+
+        plugin.forward = function () {
+            log('Fwd...');
+            doRobot('forward');
+        };
+
+        plugin.reverse = function () {
+            log('Reverse...');
+            doRobot('back');
+        };
+
+        plugin.stop = function () {
+            log('Stopped... Press <<PRESS ENTER>> to start again');
+            doRobot('stop');
+        };
+
         plugin.init();
-
     };
 
-    // add the plugin to the jQuery.fn object
-    $.fn.robotUtil = function(options) {
-
-        // iterate through the DOM elements we are attaching the plugin to
-        return this.each(function() {
-
-            // if plugin has not already been attached to the element
+    $.fn.robotUtil = function (options) {
+        return this.each(function () {
             if (undefined === $(this).data('robotUtil')) {
-
-                // create a new instance of the plugin
-                // pass the DOM element and the user-provided options as arguments
                 var plugin = new $.robotUtil(this, options);
-
-                // in the jQuery version of the element
-                // store a reference to the plugin object
-                // you can later access the plugin and its methods and properties like
-                // element.data('robotUtil').publicMethod(arg1, arg2, ... argn) or
-                // element.data('robotUtil').settings.propertyName
                 $(this).data('robotUtil', plugin);
-
             }
-
         });
-
     };
-
-})(jQuery);
+}(jQuery, console, io));
