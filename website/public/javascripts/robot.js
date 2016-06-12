@@ -27,33 +27,60 @@
                 return 'Status';
             }
         },
-        plugin = this,
-        $element = $(element),
-        socket = undefined,
+
+        plugin = this, $element = $(element), socket = undefined,
+
+        INSTANCE_ID = 'robot',
 
         log = function (msg, debug) {
-            if (!debug) {
+            if ( !debug) {
                 console.log(msg);
+            }
+        },
+
+        getKey = function (value, reverse) {
+            var returnValue = '';
+            if (value && reverse) {
+                returnValue = value.split(':')[1] || value;
+            } else {
+                if (value) {
+                    returnValue = INSTANCE_ID + ':' + value;
+                } else {
+                    returnValue = INSTANCE_ID;
+                }
+            }
+            return returnValue;
+        },
+
+        trigger = function (eventType, eventMsg) {
+            if (eventType) {
+                log('trigger: ' + getKey(eventType));
+                $element.trigger({
+                    type : getKey(eventType),
+                    message : eventMsg || 'OK',
+                    time : new Date()
+                });
+            } else {
+                log('Triggered event without type! '.eventMsg);
+                return;
             }
         },
 
         running = false,
 
-        doRobot = function (command) {
-            var that = this,
-                json = {};
-            
+        doTheRobot = function (command) {
+            var that = this, json = {};
             log('Do robot: ' + command);
-
-            socket.emit(command, {
-                timestamp: $.now()
+            // Send to socket
+            socket.emit(getKey(command, true), {
+                timestamp : $.now()
             });
         },
-        
+
         setupSocket = function () {
             var connectionUrl = plugin.settings.url + plugin.settings.script;
             log('setupSocket: ' + connectionUrl);
-            
+
             socket = io.connect(connectionUrl);
         },
 
@@ -99,47 +126,62 @@
                     log('Key down ignored. Robot not started! <<PRESS ENTER>>');
                 }
             });
+            // Listen for movement events
+            $element.on('robot:initRobot', function (event) {
+                log('listened: ' + event.type);
+                // Get everything ready
+                setupSocket();
+                setupSocketListeners();
+
+                trigger('ready', 'Robot initilised.');
+            });
+            // Listen for movement events
+            $element.on('robot:forward robot:reverse robot:left robot:right', function (event) {
+                doTheRobot(event.type);
+            });
         };
         plugin.settings = {};
 
-        // public methods
+        /*
+         * public methods Note: These only trigger events the prototype is
+         * listening for
+         */
         plugin.init = function () {
             log('plugin init...', false);
             plugin.settings = $.extend({}, defaults, options);
 
-            setupSocket();
-            setupSocketListeners();
             setupInterfaceListeners();
+            trigger('initRobot');
         };
 
         plugin.start = function () {
+            trigger('start');
             log('Started... Press <<PRESS ENTER>> to stop');
-            doRobot('start');
         };
 
         plugin.right = function () {
             log('Right...');
-            doRobot('right');
+            trigger('right');
         };
 
         plugin.left = function () {
             log('Left...');
-            doRobot('left', true);
+            trigger('left');
         };
 
         plugin.forward = function () {
             log('Fwd...');
-            doRobot('forward');
+            trigger('forward');
         };
 
         plugin.reverse = function () {
             log('Reverse...');
-            doRobot('back');
+            trigger('reverse');
         };
 
         plugin.stop = function () {
+            trigger('stop');
             log('Stopped... Press <<PRESS ENTER>> to start again');
-            doRobot('stop');
         };
 
         plugin.init();
