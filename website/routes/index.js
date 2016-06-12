@@ -26,7 +26,7 @@ router.get('/about', function(req, res, next) {
 
 /* GET robots page. */
 router.get('/robots', function(req, res, next) {
-    res.render('index', {
+    res.render('robot', {
 		config: websiteConfig,
 	    title: 'The ' + websiteConfig.name + ' robots',
 		body: 'Enter the robots...'

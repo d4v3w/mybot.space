@@ -25,7 +25,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Url routing
-/*
 app.use('/', routes);
 app.use('/users', users);
 
@@ -64,7 +63,7 @@ module.exports = app;
 // IO Setup
 var robots = io
     .of('/robots')
-    .sockets.on('connection', function (socket) {
+    .on('connection', function (socket) {
     // Only responding to sockets on robots
     console.log('a user connected');
 
@@ -105,4 +104,3 @@ var robots = io
         console.log("Stop");
     });
 });
-*/
